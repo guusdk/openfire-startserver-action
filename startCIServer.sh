@@ -13,6 +13,7 @@ usage()
 	echo "    -l: Launch a local Openfire. (default: off)"
 	echo "    -i: Set a hosts file for the given IP and host (or for example.com if running locally). Reverted at exit."
 	echo "    -h: The hostname for the Openfire under test (default: example.org)"
+        echo "    -b: The base directory of the distribution that is to be started"
 	exit 2
 }
 
@@ -30,6 +31,9 @@ while getopts dlh:i: OPTION "$@"; do
 		i)
 			IPADDRESS="${OPTARG}"
 			;;
+                b)
+                        BASEDIR="${OPTARG}"
+                        ;;
 		\? ) usage;;
         :  ) usage;;
         *  ) usage;;
@@ -66,15 +70,15 @@ function setHostsFile {
 }
 
 function launchOpenfire {
-	declare -r OPENFIRE_SHELL_SCRIPT="${BASEDIR}/distribution/target/distribution-base/bin/openfire.sh"
+	declare -r OPENFIRE_SHELL_SCRIPT="${BASEDIR}/bin/openfire.sh"
 
 	if [[ ! -f "${OPENFIRE_SHELL_SCRIPT}" ]]; then
 		./mvnw verify -P ci
 	fi
 
-	rm -f distribution/target/distribution-base/conf/openfire.xml
-	cp distribution/target/distribution-base/conf/openfire-demoboot.xml \
-		distribution/target/distribution-base/conf/openfire.xml
+	rm -f ${BASEDIR}/conf/openfire.xml
+	cp ${BASEDIR}/conf/openfire-demoboot.xml \
+		${BASEDIR}/conf/openfire.xml
 
 	echo "Starting Openfire…"
 	"${OPENFIRE_SHELL_SCRIPT}" &
@@ -86,7 +90,7 @@ function launchOpenfire {
 	timeout 120 bash -c 'until printf "" 2>>/dev/null >>/dev/tcp/$0/$1; do sleep 0.3; done' localhost 7070
 }
 
-setBaseDirectory
+#setBaseDirectory
 if [[ -n "${IPADDRESS-}" ]]; then
 	setHostsFile
 fi
