@@ -5,10 +5,6 @@ inputs:
     description: 'The base directory of the Openfire installation that is to be started.'
     required: false
     default: './distribution/target/distribution-base/'
-  debug:
-    description: 'Enable debug mode. Prints commands, and preserves temp directories if used.'
-    required: false
-    default: 'false'
   domain:
     description: 'XMPP domain name of server.'
     required: false
@@ -26,5 +22,5 @@ runs:
       shell: bash
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
-    - run: startCIServer.sh -d -l -i ${{ inputs.ip }} -h ${{ inputs.domain }} -b ${{ inputs.distbasedir }}
+    - run: startCIServer.sh -i ${{ inputs.ip }} -h ${{ inputs.domain }} -b ${{ inputs.distbasedir }}
       shell: bash
