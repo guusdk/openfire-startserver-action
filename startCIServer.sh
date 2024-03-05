@@ -17,7 +17,7 @@ usage()
 	exit 2
 }
 
-while getopts dlh:i: OPTION "$@"; do
+while getopts dlh:i:b: OPTION "$@"; do
 	case $OPTION in
 		d)
 			set -x

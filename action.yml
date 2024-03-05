@@ -2,7 +2,7 @@ name: 'Openfire Start Server'
 description: 'Start CI server from distribution'
 inputs:
   distbasedir:
-    description: 'The base directory of the Openfire installation that isto be started.'
+    description: 'The base directory of the Openfire installation that is to be started.'
     required: false
     default: './distribution/target/distribution-base/'
   debug:
