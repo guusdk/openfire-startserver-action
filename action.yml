@@ -1,0 +1,24 @@
+name: 'Openfire Start Server'
+description: 'Start CI server from distribution'
+inputs:
+  debug:
+    description: 'Enable debug mode. Prints commands, and preserves temp directories if used.'
+    required: false
+    default: 'false'
+  domain:
+    description: 'XMPP domain name of server.'
+    required: false
+    default: 'example.org'
+  ip:
+    description: 'Set a hosts file for the given IP and host (or for example.com if running locally)'
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - if: ${{ inputs.debug_mode == 'true' }}
+      run: bash ./startCIServer.sh -d -l -i ${{ inputs.ip }} -h ${{ inputs.domain }}
+      shell: bash
+    - if: ${{ inputs.debug_mode != 'true' }}
+      run: bash ./startCIServer.sh -l -i ${{ inputs.ip }} -h ${{ inputs.domain }}
+      shell: bash
