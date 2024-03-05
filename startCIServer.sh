@@ -43,9 +43,14 @@ function launchOpenfire {
 	declare -r OPENFIRE_SHELL_SCRIPT="${BASEDIR}/bin/openfire.sh"
 
 	if [[ ! -f "${OPENFIRE_SHELL_SCRIPT}" ]]; then
-		./mvnw verify -P ci
+		echo "Unable to find Openfire distribution in ${BASEDIR} (this file did not exist: ${OPENFIRE_SHELL_SCRIPT} )"
+		exit 1
 	fi
 
+	# Ensure script is executable
+	chmod +x "${OPENFIRE_SHELL_SCRIPT}"
+
+	# Replace standard config with demoboot config
 	rm -f ${BASEDIR}/conf/openfire.xml
 	cp ${BASEDIR}/conf/openfire-demoboot.xml \
 		${BASEDIR}/conf/openfire.xml
