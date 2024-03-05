@@ -4,7 +4,7 @@ inputs:
   distbasedir:
     description: 'The base directory of the Openfire installation that isto be started.'
     required: false
-    default: './distribution/target/distribution=base/'
+    default: './distribution/target/distribution-base/'
   debug:
     description: 'Enable debug mode. Prints commands, and preserves temp directories if used.'
     required: false
@@ -21,5 +21,10 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: bash ./startCIServer.sh -d -l -i ${{ inputs.ip }} -h ${{ inputs.domain }} -b ${{ inputs.distbasedir }}
+    - name: Set GitHub Path
+      run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+      shell: bash
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
+    - run: startCIServer.sh -d -l -i ${{ inputs.ip }} -h ${{ inputs.domain }} -b ${{ inputs.distbasedir }}
       shell: bash
